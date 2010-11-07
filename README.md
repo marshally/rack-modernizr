@@ -24,4 +24,4 @@ or environment.rb
     # Initialize the rails application
     MyApp::Application.initialize!
 
-rack-modernizr was inspired by [jamesgpearce](https://github.com/jamesgpearce)'s super awesome [modernizr-server](https://github.com/jamesgpearce/modernizr-server).  Some javascript was used from this project.
+rack-modernizr was inspired by [jamesgpearce](https://github.com/jamesgpearce)'s super awesome [modernizr-server](https://github.com/jamesgpearce/modernizr-server).  Some javascript was used from that project.

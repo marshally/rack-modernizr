@@ -4,7 +4,7 @@ require "modernizr/version"
 
 Gem::Specification.new do |s|
   s.name        = "rack-modernizr"
-  s.version     = Rack::Modernizr::VERSION
+  s.version     = Modernizr::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Marshall Yount"]
   s.email       = ["marshall@yountlabs.com"]

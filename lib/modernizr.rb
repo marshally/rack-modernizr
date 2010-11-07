@@ -1,32 +1,32 @@
+require 'rack'
+
 module Rack
   class Modernizr
+    include Rack::Utils
+
     def initialize(app, options = {})
       @app, @options = app, options
       @options[:modernizr_js_url] ||= "http://cachedcommons.org/cache/modernizr/1.5.0/javascripts/modernizr-min.js"
-      @options[:cookie_name] ||= "Modernizr1"
+      @options[:cookie_name] ||= "Modernizr"
     end
 
     def call(env)
       @req = Rack::Request.new(env)
       status, headers, response = @app.call(env)
       
-      puts headers.inspect
-      if should_add_modernizr?(headers, response)
+      if should_add_modernizr?(status, headers, response)
         response = add_modernizr(response)
         fix_content_length(headers, response)
       end
-      # if !@req.cookies.has_key? "Modernizr"
-      #   # body.gsub "</body", "Hello World</body"
-      # end
+
       [status, headers, response]
     end
 
-    def should_add_modernizr(headers, response)
-      status==200 &&
+    def should_add_modernizr?(status, headers, response)
+      !@req.cookies.has_key?( @options[:cookie_name] ) &&
+        status==200 &&
         headers["Content-Type"] && 
-        headers["Content-Type"].include?("text/html") && 
-        response.respond_to?("body") && 
-        !@req.cookies.has_key?( @options[:cookie_name] )
+        headers["Content-Type"].include?("text/html")
     end
     
     def fix_content_length(headers, response)
@@ -39,7 +39,7 @@ module Rack
 
     def add_modernizr(response, body = "")
       response.each{ |s| body << s.to_s }
-      [body.gsub /\<\/body\>/, "#{modernizr_js}</body>"]
+      [body.gsub(/\<\/body\>/, "#{modernizr_js}</body>")]
     end
     
     def modernizr_js

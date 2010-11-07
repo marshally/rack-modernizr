@@ -14,6 +14,9 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "rack-modernizr"
 
+  s.add_dependency 'rack', '>= 0.9.1'
+  s.add_development_dependency 'test-spec', '>= 0.9.0'
+
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

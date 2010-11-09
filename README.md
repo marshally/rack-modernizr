@@ -24,4 +24,9 @@ or environment.rb
     # Initialize the rails application
     MyApp::Application.initialize!
 
+# TODO
+
+Add usage section for retrieving cookie data in your application.  Test against multiple permutations of Rack/Ruby.
+
 rack-modernizr was inspired by [jamesgpearce](https://github.com/jamesgpearce)'s super awesome [modernizr-server](https://github.com/jamesgpearce/modernizr-server).  Some javascript was used from that project.
+

@@ -1,6 +1,6 @@
 require 'test/spec'
 require 'rack/mock'
-require 'modernizr'
+require 'rack-modernizr'
 
 context "Rack::Modernizr" do
 
@@ -80,10 +80,15 @@ context "Rack::Modernizr" do
     end
   end
 
-  # 
-  # context "when a modernizr cookie has already been set" do
-  #   specify "should not mess with the response in any way" do
-  # 
-  #   end
-  # end
+  
+  context "when a modernizr cookie has already been set" do
+    specify "should not mess with the response in any way" do
+      test_body = "<html><body>Hello World</body></html>"
+      app = lambda { |env| [200, {'Content-Type' => 'text/html'}, [test_body]] }
+      request = Rack::MockRequest.env_for("/test.html", "HTTP_COOKIE" => "Modernizr=blarghfasel")
+      body = Rack::Modernizr.new(app).call(request).last
+      puts body[0]
+      body[0].should.not.include? "script"
+    end
+  end
 end

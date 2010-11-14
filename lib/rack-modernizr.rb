@@ -8,7 +8,7 @@ module Rack
       @app, @options = app, options
       @options[:modernizr_js_url] ||= "http://cachedcommons.org/cache/modernizr/1.5.0/javascripts/modernizr-min.js"
       @options[:key_name] ||= "Modernizr"
-      @options[:storage] ||= "session"
+      @options[:storage] ||= "cookie"
     end
 
     def call(env)
@@ -72,7 +72,6 @@ module Rack
       when "cookie"
         @req.cookies ||= {}
         @req.cookies
-      else
       end
     end
 

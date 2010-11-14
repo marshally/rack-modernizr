@@ -36,15 +36,16 @@ context "Rack::Modernizr" do
       app = lambda { |env| [200, {'Content-Type' => 'text/html; charset=utf-8'}, [test_body]] }
       request = Rack::MockRequest.env_for("/test.html")
       body = Rack::Modernizr.new(app, :modernizr_js_url => "http://distinctive.domain.com/modernizr.js").call(request).last
-      body[0].should.include? "distinctive.domain.com"
+      body[0].should.include? "http://distinctive.domain.com/modernizr.js"
     end
     
     specify "should use cookie name if initialized" do
       test_body = "<html><body>Hello World</body></html>"
       app = lambda { |env| [200, {'Content-Type' => 'text/html; charset=utf-8'}, [test_body]] }
-      request = Rack::MockRequest.env_for("/test.html")
-      body = Rack::Modernizr.new(app, :cookie_name => "distinctive_name").call(request).last
-      body[0].should.include? "distinctive_name"
+      request = Rack::MockRequest.env_for("/rack-modernizr-endpoint.gif?a=b&c=d&e=f")
+      status, headers, response = Rack::Modernizr.new(app, {:key_name => "distinctive_name", :storage => "cookie"}).call(request)
+      headers['Set-Cookie'].should.not.be.nil
+      headers['Set-Cookie'].should.include? "distinctive_name"
     end
     
     specify "should work if request body is fragmented" do
@@ -80,15 +81,14 @@ context "Rack::Modernizr" do
     end
   end
 
-  
+  # cookie storage
   context "when a modernizr cookie has already been set" do
     specify "should not mess with the response in any way" do
       test_body = "<html><body>Hello World</body></html>"
       app = lambda { |env| [200, {'Content-Type' => 'text/html'}, [test_body]] }
-      request = Rack::MockRequest.env_for("/test.html", "HTTP_COOKIE" => "Modernizr=blarghfasel")
-      body = Rack::Modernizr.new(app).call(request).last
-      puts body[0]
-      body[0].should.not.include? "script"
+      request = Rack::MockRequest.env_for("/test.html", "HTTP_COOKIE" => "Modernizr=a")
+      status, headers, response = Rack::Modernizr.new(app, :storage => 'cookie').call(request)
+      response[0].should.not.include? "script"
     end
   end
 end
